@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7c3aed">
+  <meta name="description" content="AP3X — Real-time state-driven action engine.">
+  <title>AP3X</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/pwa/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/ui/app.css">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- APP MOUNT POINT — single screen, single action -->
+  <div id="ap3x-app"></div>
+
+  <!-- BOOT -->
+  <script type="module">
+    import { initAP3X }  from "/index.js";
+    import { mountApp }  from "/ui/renderer.js";
+
+    // 1. Boot system (migrate legacy, init SSOT)
+    initAP3X();
+
+    // 2. Mount single-screen UI
+    const mount = document.getElementById("ap3x-app");
+    mountApp(mount);
+
+    // 3. Register service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/pwa/sw.js")
+        .then(() => console.log("[AP3X] SW registered."))
+        .catch((e) => console.warn("[AP3X] SW failed:", e));
+    }
+  </script>
+
+</body>
+</html>
